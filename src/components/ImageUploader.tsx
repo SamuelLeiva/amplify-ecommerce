@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { FileUploader } from "@aws-amplify/ui-react-storage";
 import "@aws-amplify/ui-react/styles.css";
 import { getUrl } from "aws-amplify/storage";
@@ -10,6 +11,8 @@ export default function ImageUploader({
 }: {
   onUpload: (url: string) => void;
 }) {
+  const { user } = useAuthenticator();
+
   //States
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
@@ -21,9 +24,9 @@ export default function ImageUploader({
       </h2>
 
       <FileUploader
-        path={({ identityId }) =>
-          identityId
-            ? `products-images/${identityId}/`
+        path={
+          user.userId
+            ? `products-images/${user.userId}/`
             : "products-images/guest/"
         }
         acceptedFileTypes={["image/*"]}
