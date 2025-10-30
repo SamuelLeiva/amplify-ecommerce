@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function ImageUploader({
   onUpload,
 }: {
-  onUpload: (url: string) => void;
+  onUpload: (path: string) => void;
 }) {
   const { user } = useAuthenticator();
 
@@ -34,10 +34,14 @@ export default function ImageUploader({
         onUploadStart={() => setUploading(true)}
         onUploadSuccess={async ({ key }) => {
           setUploading(false);
-          // Obtener la URL del archivo subido
-          const { url } = await getUrl({ path: key as string });
+
+          // ✅ El "key" es el path interno dentro del bucket
+          const fullPath = `${key}`; 
+          const { url } = await getUrl({ path: fullPath });
           setUploadedUrl(url.toString());
-          onUpload(url.toString());
+
+          // ✅ Devolvemos el path relativo, no la URL firmada
+          onUpload(fullPath);
         }}
         onUploadError={(error) => {
           console.error("Error al subir el archivo:", error);
