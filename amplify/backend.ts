@@ -6,5 +6,5 @@ import { storage } from './storage/resource';
 defineBackend({
   auth, //Cognito
   data, //DynamoDB + GraphQL API
-  storage //S3 Storage
+  storage, //S3 Storage
 });
